@@ -1,0 +1,7 @@
+{
+	"name": "@jabascript/core",
+	"version": "0.1.0",
+	"license": "MIT",
+	"keywords": ["utilities"],
+	"main": "./src/index.js"
+}

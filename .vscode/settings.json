@@ -1,0 +1,10 @@
+{
+	"licenser.license": "MIT",
+	"editor.defaultFormatter": "dprint.dprint",
+	"eslint.useFlatConfig": true,
+	"eslint.workingDirectories": [
+		"src/core/",
+		"src/dom/",
+		"src/react/"
+	]
+}
