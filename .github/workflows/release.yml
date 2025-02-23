@@ -1,9 +1,11 @@
 name: Publish to npm registry
-run-name: Publishing ${{ github.event.release.tag_name }} to npm registry
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
@@ -21,22 +23,14 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: pnpm
 
-      - name: Install dependencies 
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Set version to release tag
-        shell: bash
-        run: pnpm version from-git --no-commit-hooks --no-git-tag-version --allow-same-version
-
-      - name: Publish to npm registry
-        shell: bash
-        run: pnpm publish --access public -r --no-git-checks # no-git-checks because pnpm checks for default branch, which this action is not since it is checked out to the tag ref.
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_SECRET }}
-
-      - name: Push version changes to main branch
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
         with:
-          commit_message: "chore: release ${{ github.event.release.tag_name }}"
-          branch: ${{ github.event.repository.default_branch }}
-          file_pattern: package.json
+          publish: pnpm publish -r --access public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_SECRET }}
