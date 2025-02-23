@@ -1,5 +1,11 @@
 # @jabascript/react
 
+## 0.1.3
+
+### Patch Changes
+
+- cce4a70: Removed unused files from build output
+
 ## 0.1.2
 
 ### Patch Changes
