@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.1.2
+
+### Patch Changes
+
+- 50e6e40: Build typings before publishing
+
 ## 0.1.1
 
 ### Patch Changes
