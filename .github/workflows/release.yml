@@ -1,8 +1,9 @@
 name: Publish to npm registry
 run-name: Publishing {{ github.event.release.tag_name }} to npm registry
 
-release:
-  types: [published]
+on:
+  release:
+    types: [published]
 
 jobs:
   release:
