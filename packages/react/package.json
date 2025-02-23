@@ -2,11 +2,21 @@
 	"name": "@jabascript/react",
 	"version": "0.1.0",
 	"license": "MIT",
-	"keywords": ["utilities", "react"],
+	"keywords": [
+		"utilities",
+		"react"
+	],
+	"repository": {
+		"url": "https://github.com/Curstantine/jabascript"
+	},
 	"main": "./src/index.js",
 	"exports": {
-		".": { "import": "./src/index.js" },
-		"./client": { "import": "./src/client.js" }
+		".": {
+			"import": "./src/index.js"
+		},
+		"./client": {
+			"import": "./src/client.js"
+		}
 	},
 	"devDependencies": {
 		"react": "^19.0.0",

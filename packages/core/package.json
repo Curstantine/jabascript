@@ -3,6 +3,9 @@
 	"version": "0.1.0",
 	"license": "MIT",
 	"keywords": ["utilities"],
+	"repository": {
+		"url": "https://github.com/Curstantine/jabascript"
+	},
 	"main": "./src/index.js",
 	"exports": {
 		".": { "import": "./src/index.js" },
