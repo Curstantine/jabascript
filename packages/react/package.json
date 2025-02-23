@@ -1,0 +1,29 @@
+{
+	"name": "@jabascript/react",
+	"version": "0.1.0",
+	"license": "MIT",
+	"keywords": ["utilities", "react"],
+	"main": "./src/index.js",
+	"exports": {
+		".": { "import": "./src/index.js" },
+		"./client": { "import": "./src/client.js" }
+	},
+	"devDependencies": {
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
+	"peerDependencies": {
+		"@types/react": "*",
+		"@types/react-dom": "*",
+		"react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
+		"react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
+	},
+	"peerDependenciesMeta": {
+		"@types/react": {
+			"optional": true
+		},
+		"@types/react-dom": {
+			"optional": true
+		}
+	}
+}
