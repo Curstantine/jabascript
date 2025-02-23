@@ -24,6 +24,10 @@
 			"types": "./typings/client.d.ts"
 		}
 	},
+	"files": [
+		"src",
+		"typings"
+	],
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
 		"react": "^19.0.0",
