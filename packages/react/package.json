@@ -9,18 +9,26 @@
 	"repository": {
 		"url": "https://github.com/Curstantine/jabascript"
 	},
+	"scripts": {
+		"build:types": "tsc"
+	},
 	"main": "./src/index.js",
+	"types": "./typings/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./src/index.js"
+			"import": "./src/index.js",
+			"types": "./typings/index.d.ts"
 		},
 		"./client": {
-			"import": "./src/client.js"
+			"import": "./src/client.js",
+			"types": "./typings/client.d.ts"
 		}
 	},
 	"devDependencies": {
+		"@total-typescript/tsconfig": "^1.0.4",
 		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
+		"react-dom": "^19.0.0",
+		"typescript": "^5.7.3"
 	},
 	"peerDependencies": {
 		"@types/react": "*",
