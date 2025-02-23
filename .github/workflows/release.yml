@@ -30,7 +30,7 @@ jobs:
 
       - name: Bump version and publish to npm registry
         shell: bash
-        run: pnpm publish --access public -r
+        run: pnpm publish --access public -r --no-git-checks # no-git-checks because pnpm checks for default branch, which this action is not since it is checked out to the tag ref.
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_SECRET }}
 
