@@ -1,5 +1,11 @@
 # @jabascript/react
 
+## 0.2.0
+
+### Minor Changes
+
+- fd86244: Add useMediaQuery hooks to react/client
+
 ## 0.1.3
 
 ### Patch Changes
