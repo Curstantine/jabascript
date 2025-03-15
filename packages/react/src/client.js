@@ -1,5 +1,5 @@
 /** @import {Dispatch, SetStateAction} from "react"; */
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 
 /**
  * Creates a boolean where one gets delayed than the other whenever the setter is called.
@@ -34,4 +34,35 @@ export function useDelayedToggleState(defaultValue, delay = 300) {
 	);
 
 	return [toggled, delayed, setState];
+}
+
+/**
+ * Creates a match case for a passed media query.
+ *
+ * @example
+ * const isMobile = useMediaQuery("(max-width: 768px)", false);
+ * if (isMobile) return <span>mobile</span>;
+ *
+ * return <span>desktop</span>;
+ *
+ * @param {string} query The media query string.
+ * @param {boolean} defaultValue The default value of the state. Used in server-side contexts.
+ *
+ * @returns {boolean}
+ */
+export function useMediaQuery(query, defaultValue) {
+	const mediaQuery = useMemo(
+		() => typeof window === "undefined" ? null : window.matchMedia(query),
+		[query],
+	);
+	const getState = useCallback(() => mediaQuery?.matches ?? false, [mediaQuery]);
+	const getServerState = useCallback(() => defaultValue, [defaultValue]);
+
+	/** @type {Parameters<typeof useSyncExternalStore>[0]} */
+	const subscribe = useCallback((callback) => {
+		mediaQuery?.addEventListener("change", callback);
+		return () => mediaQuery?.removeEventListener("change", callback);
+	}, []);
+
+	return useSyncExternalStore(subscribe, getState, getServerState);
 }
