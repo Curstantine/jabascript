@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.3.0
+
+### Minor Changes
+
+- 574e868: Migrate query utils to its own package
+
 ## 0.2.0
 
 ### Minor Changes
