@@ -73,7 +73,7 @@ export function createSearchParams(params = {}, allowFalsy = false) {
  */
 export function createURL(base, params = {}, allowFalsy = false) {
 	const url = new URL(base);
-	url.searchParams = createSearchParams(params, allowFalsy);
+	url.search = createSearchParams(params, allowFalsy).toString();
 
 	return url;
 }
