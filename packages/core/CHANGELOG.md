@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.3.1
+
+### Patch Changes
+
+- 2535e62: Changed package to module
+
 ## 0.3.0
 
 ### Minor Changes
