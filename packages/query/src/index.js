@@ -13,7 +13,7 @@
  * - `string | number`: directly passed to the parameter
  * - `null | undefined`: Skipped unless specified by {@link allowFalsy}
  * - `[Record<string, T>, T]`: Keyed into. The record will be used as a source, and the second value is used as the key.
- * - `ArrayLike<string | number | null | undefined>: Appended into the params.
+ * - `(string | number | null | undefined)[]`: Appended into the params.
  *
  * @example
  * const params = createQueryParams({ limit: 10, search: "watermelon", offset: undefined, "tagIds[]": [123, 321], mode: [{ eager: "Eager", meager: "Meager" }, "eager"] })
@@ -23,7 +23,7 @@
  * const params = createQueryParams({ limit: 10, search: "watermelon", offset: undefined, "tagIds[]": [123, 321] }, true);
  * params.toString(); // returns ?limit=10&search=watermelon&offset=undefined&tagIds[]=123&tagIds[]=321
  *
- * @param {Record<string, Primitives | Option | ArrayLike<Primitives>>} [params={}]
+ * @param {Record<string, Primitives | Option | Primitives[]} [params={}]
  * @param {boolean} [allowFalsy=false] Allows `null` and `undefined` to be serialized as params.
  *
  * @returns {URLSearchParams}
