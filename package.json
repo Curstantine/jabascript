@@ -6,6 +6,7 @@
 	"author": "Curstantine",
 	"license": "MIT",
 	"scripts": {
+		"test": "pnpm run -r test",
 		"build:types": "pnpm run -r build:types",
 		"publish": "pnpm build:types && pnpm publish -r --access public"
 	},
