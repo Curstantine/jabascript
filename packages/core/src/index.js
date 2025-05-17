@@ -30,7 +30,7 @@ export function takeUnless(source, predicate) {
  *
  * @template T, Z
  * @param {T} source
- * @param {(value: T) => Z} map
+ * @param {(value: NonNullable<T>) => Z} map
  * @param {(value: T) => boolean} predicate
  *
  * @returns {Z | null}
