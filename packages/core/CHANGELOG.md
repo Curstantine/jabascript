@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.3.2
+
+### Patch Changes
+
+- 7a8e2c4: Added NonNullable to map in takeMapped
+
 ## 0.3.1
 
 ### Patch Changes
