@@ -1,5 +1,6 @@
 packages:
   - packages/core
   - packages/dom
+  - packages/form-data
   - packages/query
   - packages/react
