@@ -1,6 +1,7 @@
 {
 	"licenser.license": "MIT",
 	"editor.defaultFormatter": "dprint.dprint",
+	"dprint.path": "node_modules/.bin/dprint",
 	"eslint.useFlatConfig": true,
 	"eslint.workingDirectories": [
 		"packages/core/",
