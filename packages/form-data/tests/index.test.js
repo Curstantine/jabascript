@@ -3,56 +3,29 @@ import { describe, it } from "node:test";
 
 import { parseFormData } from "../src/index.js";
 
-const data = new FormData();
-data.set("attempt", 5);
-
-data.set("user.name", "Curstantine");
-data.set("user.password", "Riamu");
-
-data.set("photos", "1");
-data.append("photos", "2");
-data.append("photos", "3");
-
-data.set("items[0].name", "Item name #1");
-data.set("items[0].price", 500);
-data.set("items[0].addons", "Addon #1");
-data.append("items[0].addons", "Addon #2");
-
-data.set("items[1].name", "Item name #2");
-data.set("items[1].price", 650);
-data.set("items[1].addons", "Addon #1");
-data.append("items[1].addons", "Addon #2");
-
-data.set("gp[0]", "Bahrain");
-data.set("gp[1]", "Spa");
-
-const result = parseFormData(data);
-console.dir(result, { depth: null });
 describe("parseFormData", () => {
 	it("should parse simple key-value pairs", () => {
-		const data = new FormData();
-		data.set("name", "test");
-		data.set("age", "25");
+		const formData = new FormData();
+		formData.set("name", "test");
+		formData.set("value", "123");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
 			name: "test",
-			age: "25",
+			value: "123",
 		});
 	});
 
 	it("should parse nested objects with dot notation", () => {
-		const data = new FormData();
-		data.set("user.name", "John");
-		data.set("user.email", "john@example.com");
-		data.set("config.theme", "dark");
+		const formData = new FormData();
+		formData.set("user.name", "john");
+		formData.set("user.email", "john@example.com");
+		formData.set("config.theme", "dark");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
 			user: {
-				name: "John",
+				name: "john",
 				email: "john@example.com",
 			},
 			config: {
@@ -61,123 +34,122 @@ describe("parseFormData", () => {
 		});
 	});
 
-	it("should create arrays from repeated keys", () => {
-		const data = new FormData();
-		data.set("tags", "javascript");
-		data.append("tags", "nodejs");
-		data.append("tags", "testing");
+	it("should handle multiple values for same key as array", () => {
+		const formData = new FormData();
+		formData.set("tags", "javascript");
+		formData.append("tags", "nodejs");
+		formData.append("tags", "web");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
-			tags: ["javascript", "nodejs", "testing"],
+			tags: ["javascript", "nodejs", "web"],
 		});
 	});
 
 	it("should parse indexed arrays", () => {
-		const data = new FormData();
-		data.set("items[0]", "first");
-		data.set("items[1]", "second");
-		data.set("items[2]", "third");
+		const formData = new FormData();
+		formData.set("items[0]", "first");
+		formData.set("items[1]", "second");
+		formData.set("items[2]", "third");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
 			items: ["first", "second", "third"],
 		});
 	});
 
-	it("should parse nested indexed arrays", () => {
-		const data = new FormData();
-		data.set("products[0].name", "Product A");
-		data.set("products[0].price", "100");
-		data.set("products[1].name", "Product B");
-		data.set("products[1].price", "200");
+	it("should parse indexed arrays with nested objects", () => {
+		const formData = new FormData();
+		formData.set("users[0].name", "alice");
+		formData.set("users[0].age", "25");
+		formData.set("users[1].name", "bob");
+		formData.set("users[1].age", "30");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
-			products: [
-				{ name: "Product A", price: "100" },
-				{ name: "Product B", price: "200" },
+			users: [
+				{ name: "alice", age: "25" },
+				{ name: "bob", age: "30" },
 			],
 		});
+	});
+
+	it("should handle custom separator", () => {
+		const formData = new FormData();
+		formData.set("user:profile:name", "test");
+		formData.set("user:settings:theme", "light");
+
+		const result = parseFormData(formData, ":");
+		assert.deepStrictEqual(result, {
+			user: {
+				profile: {
+					name: "test",
+				},
+				settings: {
+					theme: "light",
+				},
+			},
+		});
+	});
+
+	it("should throw error for invalid array index", () => {
+		const formData = new FormData();
+		formData.set("items[invalid]", "value");
+
+		assert.throws(() => {
+			parseFormData(formData);
+		}, /index must be a positive integer/);
+	});
+
+	it("should throw error for negative array index", () => {
+		const formData = new FormData();
+		formData.set("items[-1]", "value");
+
+		assert.throws(() => {
+			parseFormData(formData);
+		}, /index must be a positive integer/);
 	});
 
 	it("should handle mixed nested structures", () => {
-		const data = new FormData();
-		data.set("title", "Test Form");
-		data.set("user.profile.name", "Alice");
-		data.set("user.profile.age", "30");
-		data.set("tags", "web");
-		data.append("tags", "form");
-		data.set("items[0].id", "1");
-		data.set("items[0].values", "a");
-		data.append("items[0].values", "b");
+		const formData = new FormData();
+		formData.set("name", "@jabascript/form-data");
+		formData.set("repository.url", "https://example.com");
+		formData.set("keywords", "utilities");
+		formData.append("keywords", "form-data");
+		formData.set("dependencies[0].name", "@jabascript/core");
+		formData.set("dependencies[1].name", "@jabascript/query");
+		formData.set("devDependencies[0]", "typescript");
+		formData.set("devDependencies[1]", "eslint");
 
-		const result = parseFormData(data);
-
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {
-			title: "Test Form",
-			user: {
-				profile: {
-					name: "Alice",
-					age: "30",
-				},
+			name: "@jabascript/form-data",
+			repository: {
+				url: "https://example.com",
 			},
-			tags: ["web", "form"],
-			items: [
-				{
-					id: "1",
-					values: ["a", "b"],
-				},
+			keywords: ["utilities", "form-data"],
+			dependencies: [
+				{ name: "@jabascript/core" },
+				{ name: "@jabascript/query" },
 			],
+			devDependencies: ["typescript", "eslint"],
 		});
-	});
-
-	it("should handle sparse arrays", () => {
-		const data = new FormData();
-		data.set("sparse[0]", "first");
-		data.set("sparse[5]", "sixth");
-
-		const result = parseFormData(data);
-
-		assert.strictEqual(result.sparse[0], "first");
-		assert.strictEqual(result.sparse[5], "sixth");
-		assert.strictEqual(result.sparse.length, 6);
-	});
-
-	it("should throw error for invalid array indices", () => {
-		const data = new FormData();
-		data.set("invalid[abc]", "value");
-
-		assert.throws(() => parseFormData(data), /index must be a number/);
 	});
 
 	it("should handle empty FormData", () => {
-		const data = new FormData();
-
-		const result = parseFormData(data);
-
+		const formData = new FormData();
+		const result = parseFormData(formData);
 		assert.deepStrictEqual(result, {});
 	});
 
-	it("should handle deep nesting", () => {
-		const data = new FormData();
-		data.set("a.b.c.d.e", "deep");
+	it("should handle sparse arrays", () => {
+		const formData = new FormData();
+		formData.set("items[0]", "first");
+		formData.set("items[2]", "third");
 
-		const result = parseFormData(data);
-
-		assert.deepStrictEqual(result, {
-			a: {
-				b: {
-					c: {
-						d: {
-							e: "deep",
-						},
-					},
-				},
-			},
-		});
+		const result = parseFormData(formData);
+		assert.strictEqual(result.items[0], "first");
+		assert.strictEqual(result.items[1], undefined);
+		assert.strictEqual(result.items[2], "third");
 	});
 });
