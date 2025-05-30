@@ -1,10 +1,9 @@
 {
-	"extends": "@total-typescript/tsconfig/tsc/no-dom/library",
+	"extends": "@total-typescript/tsconfig/tsc/dom/library",
 	"compilerOptions": {
 		"outDir": "./typings",
 		"emitDeclarationOnly": true,
-		"declarationMap": true,
-		"lib": ["es2022", "dom"]
+		"declarationMap": true
 	},
 	"include": ["src"]
 }
