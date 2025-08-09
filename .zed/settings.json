@@ -1,0 +1,52 @@
+{
+    "languages": {
+        "TSX": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        },
+        "TypeScript": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        },
+        "JavaScript": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        },
+        "JSON": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        },
+        "Markdown": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        },
+        "Astro": {
+            "formatter": {
+                "external": {
+                    "command": "dprint",
+                    "arguments": ["fmt", "--stdin", "{buffer_path}"]
+                }
+            }
+        }
+    }
+}

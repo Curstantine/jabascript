@@ -30,7 +30,7 @@ export function takeUnless(source, predicate) {
  *
  * @template T, Z
  * @param {T} source
- * @param {(value: T) => Z} map
+ * @param {(value: NonNullable<T>) => Z} map
  * @param {(value: T) => boolean} predicate
  *
  * @returns {Z | null}
@@ -64,4 +64,19 @@ export function debounce(func, delay = 1000) {
 
 export async function wait(delay = 1000) {
 	await new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+/**
+ * Clamps a value between min and max.
+ *
+ * @example
+ * clamp(24, [20, 25]); // 24
+ * clamp(26, [20, 25]); // 25
+ * clamp(19, [20, 25]); // 20
+ *
+ * @param {number} value source value
+ * @param {[number, number]} minmax [min, max] numbers
+ */
+export function clamp(value, [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER]) {
+	return Math.max(min, Math.min(value, max));
 }

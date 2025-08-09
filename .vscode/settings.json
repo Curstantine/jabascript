@@ -1,10 +1,14 @@
 {
 	"licenser.license": "MIT",
 	"editor.defaultFormatter": "dprint.dprint",
+	"dprint.path": "node_modules/.bin/dprint",
 	"eslint.useFlatConfig": true,
 	"eslint.workingDirectories": [
-		"src/core/",
-		"src/dom/",
-		"src/react/"
+		"packages/core/",
+		"packages/dom/",
+		"packages/react/"
+	],
+	"cSpell.words": [
+		"jabascript"
 	]
 }

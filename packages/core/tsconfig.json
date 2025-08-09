@@ -1,0 +1,9 @@
+{
+	"extends": "@total-typescript/tsconfig/tsc/no-dom/library",
+	"compilerOptions": {
+		"outDir": "./typings",
+		"emitDeclarationOnly": true,
+		"declarationMap": true
+	},
+	"include": ["src"]
+}

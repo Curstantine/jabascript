@@ -1,10 +1,11 @@
 {
-	"name": "@jabascript/core",
-	"version": "0.3.2",
+	"name": "@jabascript/query",
+	"version": "0.1.2",
 	"license": "MIT",
 	"type": "module",
 	"keywords": [
-		"utilities"
+		"utilities",
+		"query"
 	],
 	"repository": {
 		"url": "https://github.com/Curstantine/jabascript"
