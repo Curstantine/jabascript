@@ -19,6 +19,10 @@
 		".": {
 			"import": "./src/index.js",
 			"types": "./typings/index.d.ts"
+		},
+		"./enum": {
+			"import": "./src/enum.js",
+			"types": "./typings/enum.d.ts"
 		}
 	},
 	"files": [
