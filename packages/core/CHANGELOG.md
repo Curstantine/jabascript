@@ -1,5 +1,15 @@
 # @jabascript/core
 
+## 0.4.0
+
+### Minor Changes
+
+- 495a603: Added enum support
+
+### Patch Changes
+
+- 3886aee: Update package dependencies
+
 ## 0.3.2
 
 ### Patch Changes
