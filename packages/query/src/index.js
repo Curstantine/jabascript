@@ -95,3 +95,67 @@ export function createURL(base, params = {}, allowFalsy = false) {
 
 	return url;
 }
+
+/**
+ * Parses a URLSearchParams object into a JavaScript object, reversing the behavior of {@link createSearchParams}.
+ * Handles single values, arrays, and falsy values based on the provided configuration.
+ *
+ * ## Caution: Array Handling
+ * Note: Keys are considered arrays only when they are explicitly suffixed with "[]" (array hint) or when multiple entries exist for the same key.
+ * If a key has a single value and no array hint, parseSearchParams will return that single literal (string, null, or undefined) rather than a one-element array.
+ *
+ * @example
+ * const searchParams = new URLSearchParams("limit=10&search=watermelon&tagIds[]=123&tagIds[]=321&mode=Eager");
+ * const result = parseSearchParams(searchParams);
+ * // Returns: { limit: "10", search: "watermelon", "tagIds[]": ["123", "321"], mode: "Eager" }
+ *
+ * @example <caption>With `allowFalsy` flag enabled</caption>
+ * const searchParams = new URLSearchParams("limit=10&search=watermelon&offset=undefined&tagIds[]=123&tagIds[]=321");
+ * const result = parseSearchParams(searchParams, true);
+ * // Returns: { limit: "10", search: "watermelon", offset: "undefined", "tagIds[]": ["123", "321"] }
+ *
+ * @example <caption>Array hint</caption>
+ * const searchParams = new URLSearchParamms("tagIds[]=123&tagIds[]=321&persIds=123&persIds=321")
+ * // Returns: { "tagIds[]": ["123", "321"], persIds: ["123", "321"] }
+ *
+ * const searchParams = new URLSearchParamms("tagIds[]=123&persIds=123")
+ * // Returns: { "tagIds[]": ["123"], persIds: "123" }
+ *
+ * @param {URLSearchParams} searchParams - The URLSearchParams object to parse.
+ * @param {boolean} [allowFalsy=false] - If true, includes keys with 'undefined' or 'null' string values in the output.
+ * @returns {Record<string, string | string[]>} - The parsed object with keys mapping to single values or arrays.
+ */
+export function parseSearchParams(searchParams, allowFalsy = false) {
+	const result = {};
+
+	for (const [x, y] of searchParams.entries()) {
+		const val = getLiteralValue(y);
+		const isArray = x.endsWith("[]") || x in result;
+
+		if (!isArray && !allowFalsy && (val === undefined || val === null)) continue;
+
+		if (!isArray) result[x] = val;
+		else {
+			if (result[x] === undefined) {
+				result[x] = [];
+			} else if (!Array.isArray(result[x])) {
+				result[x] = [result[x]];
+			}
+
+			result[x].push(val);
+		}
+	}
+
+	return result;
+}
+
+/**
+ * Convert literal 'null'/'undefined' strings to their real values.
+ * @param {string} value
+ * @returns {string | null | undefined}
+ */
+export function getLiteralValue(value) {
+	if (value === "null") return null;
+	if (value === "undefined") return undefined;
+	return value;
+}
