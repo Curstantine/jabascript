@@ -1,16 +1,16 @@
 /**
  * @template T
- * @typedef {[keyof T, T[keyof T]][]} ReadonlyRecordEntriesType
+ * @typedef {[keyof T, T[keyof T]][] & {}} ReadonlyRecordEntriesType
  */
 
 /**
  * @template T
- * @typedef {(keyof T)[]} ReadonlyRecordKeysType
+ * @typedef {(keyof T)[] & {}} ReadonlyRecordKeysType
  */
 
 /**
  * @template T
- * @typedef {T[keyof T][]} ReadonlyRecordValuesType
+ * @typedef {T[keyof T][] & {}} ReadonlyRecordValuesType
  */
 
 /**
@@ -18,7 +18,8 @@
  * @typedef {Readonly<T> & {
  *   keys: () => ReadonlyRecordKeysType<T>,
  *   values: () => ReadonlyRecordValuesType<T>,
- *   entries: () => ReadonlyRecordEntriesType<T>
+ *   entries: () => ReadonlyRecordEntriesType<T>,
+ * 	 infer: ReadonlyRecordValuesType<T>[number]
  * }} EnumLike
  */
 
@@ -49,5 +50,6 @@ export function createEnum(enumLike) {
 		keys: () => Object.keys(enumLike),
 		values: () => Object.values(enumLike),
 		entries: () => Object.entries(enumLike),
+		infer: Symbol(),
 	});
 }
