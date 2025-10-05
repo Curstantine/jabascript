@@ -14,7 +14,7 @@ This project is broken down into multiple packages each with their own dedicated
    - Client hooks are contained under `@jabascript/react/client`
    - Server only utilities are grouped under `@jabascript/react/server`
 
-All of these packages are published npm.
+All of these packages are published to npm.
 
 ```
 pnpm add @jabascript/core
