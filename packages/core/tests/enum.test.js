@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, expect, it } from "vitest";
 
 import { createEnum } from "../src/enum.js";
 
@@ -13,10 +12,10 @@ describe("createEnum", () => {
 			}),
 		);
 
-		assert.strictEqual(Object.isFrozen(Color), true);
-		assert.deepStrictEqual(Color.keys(), ["RED", "GREEN", "BLUE"]);
-		assert.deepStrictEqual(Color.values(), ["red", "green", "blue"]);
-		assert.deepStrictEqual(Color.entries(), [
+		expect(Object.isFrozen(Color)).toBe(true);
+		expect(Color.keys()).toEqual(["RED", "GREEN", "BLUE"]);
+		expect(Color.values()).toEqual(["red", "green", "blue"]);
+		expect(Color.entries()).toEqual([
 			["RED", "red"],
 			["GREEN", "green"],
 			["BLUE", "blue"],
@@ -31,9 +30,9 @@ describe("createEnum", () => {
 			}),
 		);
 
-		assert.deepStrictEqual(Status.keys(), ["ACTIVE", "INACTIVE"]);
-		assert.deepStrictEqual(Status.values(), [1, 0]);
-		assert.deepStrictEqual(Status.entries(), [
+		expect(Status.keys()).toEqual(["ACTIVE", "INACTIVE"]);
+		expect(Status.values()).toEqual([1, 0]);
+		expect(Status.entries()).toEqual([
 			["ACTIVE", 1],
 			["INACTIVE", 0],
 		]);
@@ -47,11 +46,11 @@ describe("createEnum", () => {
 			}),
 		);
 
-		assert.throws(() => {
+		expect(() => {
 			Direction.LEFT = "left";
-		}, TypeError);
+		}).toThrow(TypeError);
 
-		assert.strictEqual(Direction.LEFT, undefined);
+		expect(Direction.LEFT).toBeUndefined();
 	});
 
 	it("should work with symbol values", () => {
@@ -62,9 +61,9 @@ describe("createEnum", () => {
 			B: symB,
 		});
 
-		assert.deepStrictEqual(MyEnum.keys(), ["A", "B"]);
-		assert.deepStrictEqual(MyEnum.values(), [symA, symB]);
-		assert.deepStrictEqual(MyEnum.entries(), [
+		expect(MyEnum.keys()).toEqual(["A", "B"]);
+		expect(MyEnum.values()).toEqual([symA, symB]);
+		expect(MyEnum.entries()).toEqual([
 			["A", symA],
 			["B", symB],
 		]);

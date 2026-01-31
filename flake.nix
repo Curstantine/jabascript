@@ -21,6 +21,7 @@
         buildInputs = with pkgs; [
           nodejs_22
           corepack
+          playwright-driver.browsers
         ];
 
         # Dependencies required at build-time.
@@ -29,7 +30,11 @@
       {
         # Development shell with: nix develop
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ dprint ] ++ buildInputs ++ nativeBuildInputs;
+          buildInputs = with pkgs; [ ] ++ buildInputs ++ nativeBuildInputs;
+          shellHook = ''
+            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
+            export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
+          '';
         };
       }
     );

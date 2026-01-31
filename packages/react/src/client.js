@@ -12,9 +12,10 @@ import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
  *
  * @param {boolean} defaultValue The default value of the state.
  * @param {number} delay The delay in milliseconds.
+ * @param {number} escapeDelay The delay in milliseconds when escaping from the delayed state.
  * @returns {[boolean, boolean, Dispatch<SetStateAction<boolean>>]} The render state, delayed state, and the setter.
  */
-export function useDelayedToggleState(defaultValue, delay = 300) {
+export function useDelayedToggleState(defaultValue, delay = 300, escapeDelay = 1) {
 	const [toggled, setToggle] = useState(defaultValue);
 	const [delayed, setDelayed] = useState(defaultValue);
 
@@ -27,10 +28,10 @@ export function useDelayedToggleState(defaultValue, delay = 300) {
 				setTimeout(() => setDelayed(x), delay);
 			} else {
 				setDelayed(x);
-				setTimeout(() => setToggle(x), 1);
+				setTimeout(() => setToggle(x), escapeDelay);
 			}
 		},
-		[delay, toggled],
+		[delay, escapeDelay],
 	);
 
 	return [toggled, delayed, setState];

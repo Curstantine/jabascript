@@ -26,13 +26,20 @@
 		}
 	},
 	"scripts": {
-		"build:types": "tsc"
+		"build:types": "tsc",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
-		"react": "^19.1.1",
-		"react-dom": "^19.1.1",
-		"typescript": "^5.9.2"
+		"@vitejs/plugin-react": "^5.1.2",
+		"@vitest/browser-playwright": "^4.0.18",
+		"playwright": "^1.57.0",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.18",
+		"vitest-browser-react": "^2.0.5"
 	},
 	"peerDependencies": {
 		"@types/react": "*",

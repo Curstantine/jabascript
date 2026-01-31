@@ -1,5 +1,4 @@
-import assert from "node:assert";
-import { describe, it } from "node:test";
+import { describe, expect, it } from "vitest";
 
 import { parseFormData } from "../src/index.js";
 
@@ -10,7 +9,7 @@ describe("parseFormData", () => {
 		formData.set("value", "123");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			name: "test",
 			value: "123",
 		});
@@ -23,7 +22,7 @@ describe("parseFormData", () => {
 		formData.set("config.theme", "dark");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			user: {
 				name: "john",
 				email: "john@example.com",
@@ -41,7 +40,7 @@ describe("parseFormData", () => {
 		formData.append("tags", "web");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			tags: ["javascript", "nodejs", "web"],
 		});
 	});
@@ -53,7 +52,7 @@ describe("parseFormData", () => {
 		formData.set("items[2]", "third");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			items: ["first", "second", "third"],
 		});
 	});
@@ -66,7 +65,7 @@ describe("parseFormData", () => {
 		formData.set("users[1].age", "30");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			users: [
 				{ name: "alice", age: "25" },
 				{ name: "bob", age: "30" },
@@ -80,7 +79,7 @@ describe("parseFormData", () => {
 		formData.set("user:settings:theme", "light");
 
 		const result = parseFormData(formData, ":");
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			user: {
 				profile: {
 					name: "test",
@@ -96,18 +95,18 @@ describe("parseFormData", () => {
 		const formData = new FormData();
 		formData.set("items[invalid]", "value");
 
-		assert.throws(() => {
+		expect(() => {
 			parseFormData(formData);
-		}, /index must be a positive integer/);
+		}).toThrow(/index must be a positive integer/);
 	});
 
 	it("should throw error for negative array index", () => {
 		const formData = new FormData();
 		formData.set("items[-1]", "value");
 
-		assert.throws(() => {
+		expect(() => {
 			parseFormData(formData);
-		}, /index must be a positive integer/);
+		}).toThrow(/index must be a positive integer/);
 	});
 
 	it("should handle mixed nested structures", () => {
@@ -122,7 +121,7 @@ describe("parseFormData", () => {
 		formData.set("devDependencies[1]", "eslint");
 
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {
+		expect(result).toEqual({
 			name: "@jabascript/form-data",
 			repository: {
 				url: "https://example.com",
@@ -136,7 +135,7 @@ describe("parseFormData", () => {
 	it("should handle empty FormData", () => {
 		const formData = new FormData();
 		const result = parseFormData(formData);
-		assert.deepStrictEqual(result, {});
+		expect(result).toEqual({});
 	});
 
 	it("should handle sparse arrays", () => {
@@ -145,8 +144,8 @@ describe("parseFormData", () => {
 		formData.set("items[2]", "third");
 
 		const result = parseFormData(formData);
-		assert.strictEqual(result.items[0], "first");
-		assert.strictEqual(result.items[1], undefined);
-		assert.strictEqual(result.items[2], "third");
+		expect(result.items[0]).toBe("first");
+		expect(result.items[1]).toBeUndefined();
+		expect(result.items[2]).toBe("third");
 	});
 });

@@ -24,7 +24,8 @@
 	},
 	"scripts": {
 		"build:types": "tsc",
-		"test": "node --test"
+		"test": "vitest run --project form-data",
+		"test:watch": "vitest --project form-data"
 	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",

@@ -24,10 +24,12 @@
 	},
 	"scripts": {
 		"build:types": "tsc",
-		"test": "node --test"
+		"test": "vitest run --project query",
+		"test:watch": "vitest --project query"
 	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.2",
+		"vitest": "^4.0.18"
 	}
 }

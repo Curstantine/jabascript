@@ -27,7 +27,8 @@
 	},
 	"scripts": {
 		"build:types": "tsc",
-		"test": "node --test"
+		"test": "vitest run --project core",
+		"test:watch": "vitest --project core"
 	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
