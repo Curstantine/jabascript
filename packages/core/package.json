@@ -1,34 +1,34 @@
 {
 	"name": "@jabascript/core",
 	"version": "0.4.1",
-	"license": "MIT",
-	"type": "module",
 	"keywords": [
 		"utilities"
 	],
+	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/Curstantine/jabascript"
-	},
-	"scripts": {
-		"build:types": "tsc",
-		"test": "node --test"
-	},
-	"main": "./src/index.js",
-	"types": "./typings/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./src/index.js",
-			"types": "./typings/index.d.ts"
-		},
-		"./enum": {
-			"import": "./src/enum.js",
-			"types": "./typings/enum.d.ts"
-		}
 	},
 	"files": [
 		"src",
 		"typings"
 	],
+	"type": "module",
+	"main": "./src/index.js",
+	"types": "./typings/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./typings/index.d.ts",
+			"import": "./src/index.js"
+		},
+		"./enum": {
+			"types": "./typings/enum.d.ts",
+			"import": "./src/enum.js"
+		}
+	},
+	"scripts": {
+		"build:types": "tsc",
+		"test": "node --test"
+	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
 		"typescript": "^5.9.2"

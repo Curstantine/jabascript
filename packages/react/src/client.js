@@ -52,7 +52,7 @@ export function useDelayedToggleState(defaultValue, delay = 300) {
  */
 export function useMediaQuery(query, defaultValue) {
 	const mediaQuery = useMemo(
-		() => typeof window === "undefined" ? null : window.matchMedia(query),
+		() => (typeof window === "undefined" ? null : window.matchMedia(query)),
 		[query],
 	);
 	const getState = useCallback(() => mediaQuery?.matches ?? false, [mediaQuery]);

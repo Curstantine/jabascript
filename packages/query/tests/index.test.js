@@ -59,14 +59,17 @@ describe("createSearchParams", () => {
 
 	it("should handle complex mixed types with allowFalsy", () => {
 		const options = { yes: "Yes", no: "No" };
-		const params = createSearchParams({
-			limit: 10,
-			search: "term",
-			offset: undefined,
-			"tagIds[]": [123, null, 321],
-			active: [options, "yes"],
-			skip: null,
-		}, true);
+		const params = createSearchParams(
+			{
+				limit: 10,
+				search: "term",
+				offset: undefined,
+				"tagIds[]": [123, null, 321],
+				active: [options, "yes"],
+				skip: null,
+			},
+			true,
+		);
 		assert.strictEqual(
 			params.toString(),
 			"limit=10&search=term&offset=undefined&tagIds%5B%5D=123&tagIds%5B%5D=null&tagIds%5B%5D=321&active=Yes&skip=null",
@@ -152,14 +155,18 @@ describe("createURL", () => {
 
 	it("should handle complex mixed types with allowFalsy", () => {
 		const options = { yes: "Yes", no: "No" };
-		const url = createURL(baseStr, {
-			limit: 10,
-			search: "term",
-			offset: undefined,
-			"tagIds[]": [123, null, 321],
-			active: [options, "yes"],
-			skip: null,
-		}, true);
+		const url = createURL(
+			baseStr,
+			{
+				limit: 10,
+				search: "term",
+				offset: undefined,
+				"tagIds[]": [123, null, 321],
+				active: [options, "yes"],
+				skip: null,
+			},
+			true,
+		);
 		assert.strictEqual(
 			url.toString(),
 			`${baseStr}?limit=10&search=term&offset=undefined&tagIds%5B%5D=123&tagIds%5B%5D=null&tagIds%5B%5D=321&active=Yes&skip=null`,

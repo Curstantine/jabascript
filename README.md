@@ -11,8 +11,8 @@ This project is broken down into multiple packages each with their own dedicated
 3. `@jabascript/form-data`: Utilities for handling `FormData`.
 4. `@jabascript/query`: Utilities to create and control URLs.
 5. `@jabascript/react`: Contains hooks and other utilities usable in react projects.
-   - Client hooks are contained under `@jabascript/react/client`
-   - Server only utilities are grouped under `@jabascript/react/server`
+    - Client hooks are contained under `@jabascript/react/client`
+    - Server only utilities are grouped under `@jabascript/react/server`
 
 All of these packages are published to npm.
 

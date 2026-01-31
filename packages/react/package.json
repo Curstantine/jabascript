@@ -1,33 +1,33 @@
 {
 	"name": "@jabascript/react",
 	"version": "0.2.1",
-	"license": "MIT",
 	"keywords": [
-		"utilities",
-		"react"
+		"react",
+		"utilities"
 	],
+	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/Curstantine/jabascript"
-	},
-	"scripts": {
-		"build:types": "tsc"
-	},
-	"main": "./src/index.js",
-	"types": "./typings/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./src/index.js",
-			"types": "./typings/index.d.ts"
-		},
-		"./client": {
-			"import": "./src/client.js",
-			"types": "./typings/client.d.ts"
-		}
 	},
 	"files": [
 		"src",
 		"typings"
 	],
+	"main": "./src/index.js",
+	"types": "./typings/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./typings/index.d.ts",
+			"import": "./src/index.js"
+		},
+		"./client": {
+			"types": "./typings/client.d.ts",
+			"import": "./src/client.js"
+		}
+	},
+	"scripts": {
+		"build:types": "tsc"
+	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
 		"react": "^19.1.1",

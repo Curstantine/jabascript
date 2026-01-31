@@ -128,10 +128,7 @@ describe("parseFormData", () => {
 				url: "https://example.com",
 			},
 			keywords: ["utilities", "form-data"],
-			dependencies: [
-				{ name: "@jabascript/core" },
-				{ name: "@jabascript/query" },
-			],
+			dependencies: [{ name: "@jabascript/core" }, { name: "@jabascript/query" }],
 			devDependencies: ["typescript", "eslint"],
 		});
 	});

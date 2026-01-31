@@ -3,12 +3,6 @@
 	"editor.defaultFormatter": "dprint.dprint",
 	"dprint.path": "node_modules/.bin/dprint",
 	"eslint.useFlatConfig": true,
-	"eslint.workingDirectories": [
-		"packages/core/",
-		"packages/dom/",
-		"packages/react/"
-	],
-	"cSpell.words": [
-		"jabascript"
-	]
+	"eslint.workingDirectories": ["packages/core/", "packages/dom/", "packages/react/"],
+	"cSpell.words": ["jabascript"]
 }

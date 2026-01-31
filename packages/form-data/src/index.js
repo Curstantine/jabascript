@@ -55,7 +55,7 @@ export function parseFormData(data, separator = ".") {
 		let obj = result;
 		for (let p = 0; p < accessors.length; p++) {
 			const acc = accessors[p];
-			const isLast = p == (accessors.length - 1);
+			const isLast = p == accessors.length - 1;
 
 			if (acc.endsWith("]")) {
 				const start = acc.indexOf("[");
@@ -67,7 +67,7 @@ export function parseFormData(data, separator = ".") {
 				}
 
 				obj[kn] ??= [];
-				obj = isLast ? obj[kn][idx] = v : (obj[kn][idx] ??= {});
+				obj = isLast ? (obj[kn][idx] = v) : (obj[kn][idx] ??= {});
 
 				continue;
 			}
