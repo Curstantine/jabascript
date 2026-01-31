@@ -51,18 +51,23 @@ export function useDelayedToggleState(defaultValue, delay = 300) {
  * @returns {boolean}
  */
 export function useMediaQuery(query, defaultValue) {
-	const mediaQuery = useMemo(
+	const media = useMemo(
 		() => (typeof window === "undefined" ? null : window.matchMedia(query)),
 		[query],
 	);
-	const getState = useCallback(() => mediaQuery?.matches ?? false, [mediaQuery]);
-	const getServerState = useCallback(() => defaultValue, [defaultValue]);
 
 	/** @type {Parameters<typeof useSyncExternalStore>[0]} */
-	const subscribe = useCallback((callback) => {
-		mediaQuery?.addEventListener("change", callback);
-		return () => mediaQuery?.removeEventListener("change", callback);
-	}, []);
+	const subscribe = useCallback(
+		(callback) => {
+			media?.addEventListener("change", callback);
+			return () => media?.removeEventListener("change", callback);
+		},
+		[media],
+	);
 
-	return useSyncExternalStore(subscribe, getState, getServerState);
+	return useSyncExternalStore(
+		subscribe,
+		useCallback(() => media?.matches ?? defaultValue, [media, defaultValue]),
+		() => defaultValue,
+	);
 }
