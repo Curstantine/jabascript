@@ -21,16 +21,19 @@ export function useDelayedToggleState(defaultValue, delay = 300, escapeDelay = 1
 
 	/** @type {Dispatch<SetStateAction<boolean>>} */
 	const setState = useCallback(
-		(value) => {
-			const x = typeof value === "function" ? value.call(undefined, toggled) : value;
-			if (toggled) {
-				setToggle(x);
-				setTimeout(() => setDelayed(x), delay);
-			} else {
+		(value) =>
+			setToggle((ctv) => {
+				const x = typeof value === "function" ? value(ctv) : value;
+
+				if (ctv) {
+					setTimeout(() => setDelayed(x), delay);
+					return x;
+				}
+
 				setDelayed(x);
 				setTimeout(() => setToggle(x), escapeDelay);
-			}
-		},
+				return ctv;
+			}),
 		[delay, escapeDelay],
 	);
 

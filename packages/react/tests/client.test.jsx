@@ -23,43 +23,41 @@ describe("useDelayedToggleState", () => {
 
 	it("should update delayed state first, then toggled state when opening (toggled is false)", async () => {
 		const { result, act } = await renderHook(() => useDelayedToggleState(false, 100));
-		const [toggled, delayed, set] = result.current;
 
 		// Initially both false
-		expect(toggled).toBe(false);
-		expect(delayed).toBe(false);
+		expect(result.current[0]).toBe(false);
+		expect(result.current[1]).toBe(false);
 
-		await act(() => set(true));
-		expect(toggled).toBe(false);
-		expect(delayed).toBe(true);
+		await act(() => result.current[2](true));
+		expect(result.current[0]).toBe(false);
+		expect(result.current[1]).toBe(true);
 
 		// Wait for toggled to update (after ~1ms)
-		await expect.poll(() => toggled).toBe(true);
-		expect(delayed).toBe(true);
+		await expect.poll(() => result.current[0]).toBe(true);
+		expect(result.current[1]).toBe(true);
 	});
 
 	it("should update toggled state first, then delayed state when closing (toggled is true)", async () => {
 		const { result, act } = await renderHook(() => useDelayedToggleState(true, 100));
-		const [toggled, delayed, set] = result.current;
 
 		// Initially both true
-		expect(toggled).toBe(true);
-		expect(delayed).toBe(true);
+		expect(result.current[0]).toBe(true);
+		expect(result.current[1]).toBe(true);
 
-		await act(() => set(false));
-		expect(toggled).toBe(false);
-		expect(delayed).toBe(true);
+		await act(() => result.current[2](false));
+		expect(result.current[0]).toBe(false);
+		expect(result.current[1]).toBe(true);
 
 		// Wait for delayed to update (after 100ms)
-		await expect.poll(() => delayed, { timeout: 200 }).toBe(false);
-		expect(toggled).toBe(false);
+		await expect.poll(() => result.current[1], { timeout: 200 }).toBe(false);
+		expect(result.current[0]).toBe(false);
 	});
 
 	it("should respect custom delay time", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(true, 500));
+		const { result, act } = await renderHook(() => useDelayedToggleState(true, 500));
 
 		// Start closing
-		result.current[2](false);
+		await act(() => result.current[2](false));
 
 		// Toggled should update immediately
 		expect(result.current[0]).toBe(false);
@@ -74,10 +72,10 @@ describe("useDelayedToggleState", () => {
 	});
 
 	it("should handle function updater when opening", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(false, 100));
+		const { result, act } = await renderHook(() => useDelayedToggleState(false, 100));
 
 		// Call setter with function
-		result.current[2]((prev) => !prev);
+		await act(() => result.current[2]((prev) => !prev));
 
 		// Delayed updates immediately
 		expect(result.current[1]).toBe(true);
@@ -88,10 +86,10 @@ describe("useDelayedToggleState", () => {
 	});
 
 	it("should handle function updater when closing", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(true, 100));
+		const { result, act } = await renderHook(() => useDelayedToggleState(true, 100));
 
 		// Call setter with function
-		result.current[2]((prev) => !prev);
+		await act(() => result.current[2]((prev) => !prev));
 
 		// Toggled updates immediately
 		expect(result.current[0]).toBe(false);
@@ -102,16 +100,16 @@ describe("useDelayedToggleState", () => {
 	});
 
 	it("should handle rapid toggling", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(false, 100));
+		const { result, act } = await renderHook(() => useDelayedToggleState(false, 100));
 
 		// Open
-		result.current[2](true);
+		await act(() => result.current[2](true));
 		expect(result.current[1]).toBe(true);
 
 		await expect.poll(() => result.current[0]).toBe(true);
 
 		// Close
-		result.current[2](false);
+		await act(() => result.current[2](false));
 		expect(result.current[0]).toBe(false);
 		expect(result.current[1]).toBe(true);
 
@@ -123,16 +121,14 @@ describe("useDelayedToggleState", () => {
 	});
 
 	it("should work for dialog/popup use case - opening animation", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(false, 300));
-
-		const [initialToggled, initialDelayed, setState] = result.current;
+		const { result, act } = await renderHook(() => useDelayedToggleState(false, 300));
 
 		// Initially closed
-		expect(initialToggled).toBe(false);
-		expect(initialDelayed).toBe(false);
+		expect(result.current[0]).toBe(false);
+		expect(result.current[1]).toBe(false);
 
 		// User clicks to open dialog
-		setState(true);
+		await act(() => result.current[2](true));
 
 		// Content is inserted (delayed = true), but not visible yet (toggled = false)
 		expect(result.current[1]).toBe(true); // Content in DOM
@@ -144,14 +140,14 @@ describe("useDelayedToggleState", () => {
 	});
 
 	it("should work for dialog/popup use case - closing animation", async () => {
-		const { result } = await renderHook(() => useDelayedToggleState(true, 300));
+		const { result, act } = await renderHook(() => useDelayedToggleState(true, 300));
 
 		// Initially open
 		expect(result.current[0]).toBe(true);
 		expect(result.current[1]).toBe(true);
 
 		// User clicks to close dialog
-		result.current[2](false);
+		await act(() => result.current[2](false));
 
 		// Visibility removed (toggled = false), but content still in DOM (delayed = true)
 		expect(result.current[0]).toBe(false); // Hiding animation starts
@@ -216,15 +212,15 @@ describe("useMediaQuery", () => {
 
 		// Below range
 		await page.viewport(500, 800);
-		expect(result.current).toBe(false);
+		await expect.poll(() => result.current).toBe(false);
 
 		// Within range
 		await page.viewport(900, 800);
-		expect(result.current).toBe(true);
+		await expect.poll(() => result.current).toBe(true);
 
 		// Above range
 		await page.viewport(1200, 800);
-		expect(result.current).toBe(false);
+		await expect.poll(() => result.current).toBe(false);
 	});
 
 	it("should handle orientation media queries", async () => {
