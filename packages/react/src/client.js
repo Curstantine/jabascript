@@ -12,25 +12,29 @@ import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
  *
  * @param {boolean} defaultValue The default value of the state.
  * @param {number} delay The delay in milliseconds.
+ * @param {number} escapeDelay The delay in milliseconds when escaping from the delayed state.
  * @returns {[boolean, boolean, Dispatch<SetStateAction<boolean>>]} The render state, delayed state, and the setter.
  */
-export function useDelayedToggleState(defaultValue, delay = 300) {
+export function useDelayedToggleState(defaultValue, delay = 300, escapeDelay = 1) {
 	const [toggled, setToggle] = useState(defaultValue);
 	const [delayed, setDelayed] = useState(defaultValue);
 
 	/** @type {Dispatch<SetStateAction<boolean>>} */
 	const setState = useCallback(
-		(value) => {
-			const x = typeof value === "function" ? value.call(undefined, toggled) : value;
-			if (toggled) {
-				setToggle(x);
-				setTimeout(() => setDelayed(x), delay);
-			} else {
+		(value) =>
+			setToggle((ctv) => {
+				const x = typeof value === "function" ? value(ctv) : value;
+
+				if (ctv) {
+					setTimeout(() => setDelayed(x), delay);
+					return x;
+				}
+
 				setDelayed(x);
-				setTimeout(() => setToggle(x), 1);
-			}
-		},
-		[delay, toggled],
+				setTimeout(() => setToggle(x), escapeDelay);
+				return ctv;
+			}),
+		[delay, escapeDelay],
 	);
 
 	return [toggled, delayed, setState];
@@ -51,18 +55,23 @@ export function useDelayedToggleState(defaultValue, delay = 300) {
  * @returns {boolean}
  */
 export function useMediaQuery(query, defaultValue) {
-	const mediaQuery = useMemo(
-		() => typeof window === "undefined" ? null : window.matchMedia(query),
+	const media = useMemo(
+		() => (typeof window === "undefined" ? null : window.matchMedia(query)),
 		[query],
 	);
-	const getState = useCallback(() => mediaQuery?.matches ?? false, [mediaQuery]);
-	const getServerState = useCallback(() => defaultValue, [defaultValue]);
 
 	/** @type {Parameters<typeof useSyncExternalStore>[0]} */
-	const subscribe = useCallback((callback) => {
-		mediaQuery?.addEventListener("change", callback);
-		return () => mediaQuery?.removeEventListener("change", callback);
-	}, []);
+	const subscribe = useCallback(
+		(callback) => {
+			media?.addEventListener("change", callback);
+			return () => media?.removeEventListener("change", callback);
+		},
+		[media],
+	);
 
-	return useSyncExternalStore(subscribe, getState, getServerState);
+	return useSyncExternalStore(
+		subscribe,
+		useCallback(() => media?.matches ?? defaultValue, [media, defaultValue]),
+		() => defaultValue,
+	);
 }

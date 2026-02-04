@@ -1,38 +1,45 @@
 {
 	"name": "@jabascript/react",
 	"version": "0.2.1",
-	"license": "MIT",
 	"keywords": [
-		"utilities",
-		"react"
+		"react",
+		"utilities"
 	],
+	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/Curstantine/jabascript"
-	},
-	"scripts": {
-		"build:types": "tsc"
-	},
-	"main": "./src/index.js",
-	"types": "./typings/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./src/index.js",
-			"types": "./typings/index.d.ts"
-		},
-		"./client": {
-			"import": "./src/client.js",
-			"types": "./typings/client.d.ts"
-		}
 	},
 	"files": [
 		"src",
 		"typings"
 	],
+	"main": "./src/index.js",
+	"types": "./typings/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./typings/index.d.ts",
+			"import": "./src/index.js"
+		},
+		"./client": {
+			"types": "./typings/client.d.ts",
+			"import": "./src/client.js"
+		}
+	},
+	"scripts": {
+		"build:types": "tsc",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
-		"react": "^19.1.1",
-		"react-dom": "^19.1.1",
-		"typescript": "^5.9.2"
+		"@vitejs/plugin-react": "^5.1.3",
+		"@vitest/browser-playwright": "^4.0.18",
+		"playwright": "^1.57.0",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.18",
+		"vitest-browser-react": "^2.0.5"
 	},
 	"peerDependencies": {
 		"@types/react": "*",

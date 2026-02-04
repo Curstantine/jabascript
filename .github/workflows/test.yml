@@ -1,33 +1,39 @@
 name: Run tests
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+env:
+    PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
+
 jobs:
-  release:
-    runs-on: ubuntu-latest 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          registry-url: https://registry.npmjs.org
-          cache: pnpm
+            - name: Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .node-version
+                  registry-url: https://registry.npmjs.org
+                  cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Run tests on workspace
-        run: pnpm test
+            - name: Install Playwright browsers
+              run: pnpm exec playwright install chromium --with-deps
+
+            - name: Run tests on workspace
+              run: pnpm test
