@@ -24,8 +24,8 @@
 	},
 	"scripts": {
 		"build:types": "tsc",
-		"test": "vitest run --project query",
-		"test:watch": "vitest --project query"
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"devDependencies": {
 		"@total-typescript/tsconfig": "^1.0.4",
