@@ -1,5 +1,11 @@
 # @jabascript/query
 
+## 0.2.1
+
+### Patch Changes
+
+- 0f75814: General housekeeping and added testcases.
+
 ## 0.2.0
 
 ### Minor Changes

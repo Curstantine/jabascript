@@ -1,5 +1,11 @@
 # @jabascript/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 0f75814: Fixed stale toggle value in useDelayedToggleState
+
 ## 0.2.1
 
 ### Patch Changes

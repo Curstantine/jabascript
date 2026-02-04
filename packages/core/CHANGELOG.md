@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.5.0
+
+### Minor Changes
+
+- 0f75814: Added getInitials util to core and added testcases
+
 ## 0.4.1
 
 ### Patch Changes
