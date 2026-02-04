@@ -13,13 +13,15 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
+        pkgs = import nixpkgs { inherit system; };
+
+        nodeVersionStr = builtins.readFile ./.node-version;
+        nodeMajorVersion = builtins.head (builtins.match "v?([0-9]+).*" nodeVersionStr);
+        node = pkgs."nodejs_${nodeMajorVersion}";
 
         # Dependencies required at run-time.
         buildInputs = with pkgs; [
-          nodejs_22
+          node
           corepack
           playwright-driver.browsers
         ];
