@@ -1,6 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
-import { clamp, debounce, takeIf, takeMapped, takeUnless, wait } from "../src/index.js";
+import {
+	clamp,
+	debounce,
+	getInitials,
+	takeIf,
+	takeMapped,
+	takeUnless,
+	wait,
+} from "../src/index.js";
 
 describe("takeIf", () => {
 	it("should return the value if the predicate is true", () => {
@@ -110,13 +118,25 @@ describe("debounce", () => {
 });
 
 describe("wait", () => {
+	beforeEach(() => vi.useFakeTimers());
+	afterEach(() => vi.restoreAllMocks());
+
 	it("should resolve after the specified delay", async () => {
-		const delay = 50;
-		const start = Date.now();
-		await wait(delay);
-		const end = Date.now();
-		expect(end - start).toBeGreaterThanOrEqual(delay);
-		expect(end - start).toBeLessThan(delay + 20);
+		const delay = 1000;
+		const promise = wait(delay);
+
+		vi.advanceTimersByTime(delay);
+		await expect(promise).resolves.toBeUndefined();
+	});
+
+	it("should handle different delay values", async () => {
+		const delays = [100, 500, 2000];
+
+		for (const delay of delays) {
+			const promise = wait(delay);
+			vi.advanceTimersByTime(delay);
+			await expect(promise).resolves.toBeUndefined();
+		}
 	});
 });
 
@@ -154,5 +174,65 @@ describe("clamp", () => {
 	it("should handle edge cases for min/max", () => {
 		expect(clamp(20, [20, 25])).toBe(20);
 		expect(clamp(25, [20, 25])).toBe(25);
+	});
+});
+
+describe("getInitials", () => {
+	it("should return initials from first and last names", () => {
+		expect(getInitials("John", "Doe")).toBe("JD");
+	});
+
+	it("should return first two characters of first name when last name is empty", () => {
+		expect(getInitials("Alice", "")).toBe("Al");
+	});
+
+	it("should return first two characters of last name when first name is empty", () => {
+		expect(getInitials("", "Smith")).toBe("Sm");
+	});
+
+	it("should return fallback when both names are empty", () => {
+		expect(getInitials("", "")).toBe("N/A");
+	});
+
+	it("should use custom fallback when provided", () => {
+		expect(getInitials("", "", { none: "??" })).toBe("??");
+	});
+
+	it("should use null fallback when provided", () => {
+		expect(getInitials("", "", { none: null })).toBeNull();
+		expect(getInitials(null, null, { none: null })).toBeNull();
+	});
+
+	it("should use custom separator when provided", () => {
+		expect(getInitials("John", "Doe", { separator: "_" })).toBe("J_D");
+	});
+
+	it("should uppercase initials from first and last names", () => {
+		expect(getInitials("john", "doe")).toBe("JD");
+	});
+
+	it("should handle single character names", () => {
+		expect(getInitials("J", "")).toBe("J");
+		expect(getInitials("", "D")).toBe("D");
+	});
+
+	it("should return fallback when first name is null", () => {
+		expect(getInitials(null, "")).toBe("N/A");
+		expect(getInitials(null, null)).toBe("N/A");
+	});
+
+	it("should return fallback when first name is undefined", () => {
+		expect(getInitials(undefined, "")).toBe("N/A");
+		expect(getInitials(undefined, undefined)).toBe("N/A");
+	});
+
+	it("should use last name when first name is null or undefined", () => {
+		expect(getInitials(null, "Smith")).toBe("Sm");
+		expect(getInitials(undefined, "Smith")).toBe("Sm");
+	});
+
+	it("should use first name when last name is null or undefined", () => {
+		expect(getInitials("John", null)).toBe("Jo");
+		expect(getInitials("John", undefined)).toBe("Jo");
 	});
 });

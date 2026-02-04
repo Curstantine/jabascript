@@ -80,3 +80,37 @@ export async function wait(delay = 1000) {
 export function clamp(value, [min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER]) {
 	return Math.max(min, Math.min(value, max));
 }
+
+/**
+ * Creates initials from first and last values, with optional separator and fallback.
+ *
+ * @example
+ * getInitials("John", "Doe"); // "JD"
+ * getInitials("Alice", ""); // "Al"
+ * getInitials("", "Smith"); // "Sm"
+ * getInitials("", "", { none: "??" }); // "??"
+ * getInitials("John", "Doe", { separator: "_" }); // "J_D"
+ *
+ * @param {string} first - First value
+ * @param {string} last - Last value
+ * @param {Object} options - Configuration options
+ * @param {string} [options.none="N/A"] - Fallback when no values available
+ * @param {string} [options.separator=""] - Separator between initials (e.g., "", " ", "_")
+ *
+ * @returns {string} Generated initials
+ */
+export function getInitials(first, last, { none, separator } = { none: "N/A", separator: "" }) {
+	if (first && last) return `${first[0]}${separator}${last[0]}`.toUpperCase();
+
+	if (first) {
+		const initials = first.slice(0, 2);
+		return initials;
+	}
+
+	if (last) {
+		const initials = last.slice(0, 2);
+		return initials;
+	}
+
+	return none;
+}
