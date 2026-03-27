@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createSearchParams, createURL, parseSearchParams } from "../src/index.js";
+import { createSearchParams, createURL, getLiteralValue, parseSearchParams } from "../src/index.js";
 
 describe("createSearchParams", () => {
 	it("should create basic search params", () => {
@@ -71,6 +71,27 @@ describe("createSearchParams", () => {
 		expect(params.toString()).toBe(
 			"limit=10&search=term&offset=undefined&tagIds%5B%5D=123&tagIds%5B%5D=null&tagIds%5B%5D=321&active=Yes&skip=null",
 		);
+	});
+
+	it("should treat an empty array value as no params", () => {
+		const params = createSearchParams({ a: [], b: "test" });
+		expect(params.toString()).toBe("b=test");
+	});
+
+	it("should treat a two-element array whose first element is not an object as a regular array", () => {
+		const params = createSearchParams({ key: ["a", "b"] });
+		expect(params.toString()).toBe("key=a&key=b");
+	});
+
+	it("should treat a two-element array whose second element is not a string as a regular array", () => {
+		const params = createSearchParams({ key: [{ val: "x" }, 42] });
+		expect(params.toString()).toBe("key=%5Bobject+Object%5D&key=42");
+	});
+
+	it("should serialize as 'undefined' for an Option tuple key that does not exist in the record", () => {
+		const options = { eager: "EagerValue" };
+		const params = createSearchParams({ mode: [options, "missing"] });
+		expect(params.get("mode")).toBe("undefined");
 	});
 });
 
@@ -240,5 +261,34 @@ describe("parseSearchParams", () => {
 		const searchParams = new URLSearchParams("key=value1&key=value2");
 		const result = parseSearchParams(searchParams);
 		expect(result).toEqual({ key: ["value1", "value2"] });
+	});
+
+	it("should skip null/undefined array entries by default", () => {
+		const searchParams = new URLSearchParams("ids[]=1&ids[]=null&ids[]=2");
+		const result = parseSearchParams(searchParams);
+		expect(result).toEqual({ "ids[]": ["1", null, "2"] });
+	});
+
+	it("should accumulate more than two values for the same non-[] key into an array", () => {
+		const searchParams = new URLSearchParams("tag=a&tag=b&tag=c");
+		const result = parseSearchParams(searchParams);
+		expect(result).toEqual({ tag: ["a", "b", "c"] });
+	});
+});
+
+describe("getLiteralValue", () => {
+	it("should convert the string 'null' to null", () => {
+		expect(getLiteralValue("null")).toBeNull();
+	});
+
+	it("should convert the string 'undefined' to undefined", () => {
+		expect(getLiteralValue("undefined")).toBeUndefined();
+	});
+
+	it("should return any other string unchanged", () => {
+		expect(getLiteralValue("hello")).toBe("hello");
+		expect(getLiteralValue("")).toBe("");
+		expect(getLiteralValue("0")).toBe("0");
+		expect(getLiteralValue("false")).toBe("false");
 	});
 });

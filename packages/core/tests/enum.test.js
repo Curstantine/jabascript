@@ -68,4 +68,17 @@ describe("createEnum", () => {
 			["B", symB],
 		]);
 	});
+
+	it("should allow direct property access on the enum values", () => {
+		const Status = createEnum(/**@type {const}*/ ({ ACTIVE: "active", INACTIVE: "inactive" }));
+		expect(Status.ACTIVE).toBe("active");
+		expect(Status.INACTIVE).toBe("inactive");
+	});
+
+	it("should return empty arrays for keys, values, and entries when given an empty object", () => {
+		const Empty = createEnum({});
+		expect(Empty.keys()).toEqual([]);
+		expect(Empty.values()).toEqual([]);
+		expect(Empty.entries()).toEqual([]);
+	});
 });
