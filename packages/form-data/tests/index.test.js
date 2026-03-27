@@ -148,4 +148,48 @@ describe("parseFormData", () => {
 		expect(result.items[1]).toBeUndefined();
 		expect(result.items[2]).toBe("third");
 	});
+
+	it("should handle three-level deep nesting", () => {
+		const formData = new FormData();
+		formData.set("a.b.c", "deep");
+
+		const result = parseFormData(formData);
+		expect(result).toEqual({ a: { b: { c: "deep" } } });
+	});
+
+	it("should convert a single existing value to an array when a second value is appended", () => {
+		const formData = new FormData();
+		formData.set("color", "red");
+		formData.append("color", "blue");
+
+		const result = parseFormData(formData);
+		expect(result).toEqual({ color: ["red", "blue"] });
+	});
+
+	it("should grow an existing array when additional values are appended", () => {
+		const formData = new FormData();
+		formData.set("tags", "a");
+		formData.append("tags", "b");
+		formData.append("tags", "c");
+
+		const result = parseFormData(formData);
+		expect(result).toEqual({ tags: ["a", "b", "c"] });
+	});
+
+	it("should handle indexed arrays with objects inside nested paths", () => {
+		const formData = new FormData();
+		formData.set("order.items[0].sku", "ABC");
+		formData.set("order.items[0].qty", "2");
+		formData.set("order.items[1].sku", "XYZ");
+
+		const result = parseFormData(formData);
+		expect(result).toEqual({
+			order: {
+				items: [
+					{ sku: "ABC", qty: "2" },
+					{ sku: "XYZ" },
+				],
+			},
+		});
+	});
 });

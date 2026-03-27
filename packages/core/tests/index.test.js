@@ -115,6 +115,20 @@ describe("debounce", () => {
 		expect(fn).toHaveBeenCalledTimes(1);
 		expect(fn).toHaveBeenCalledWith("test");
 	});
+
+	it("should allow multiple independent calls after each previous one resolves", async () => {
+		const fn = vi.fn();
+		const debounced = debounce(fn, 50);
+		debounced.run("first");
+		await wait(60);
+		expect(fn).toHaveBeenCalledTimes(1);
+		expect(fn).toHaveBeenCalledWith("first");
+
+		debounced.run("second");
+		await wait(60);
+		expect(fn).toHaveBeenCalledTimes(2);
+		expect(fn).toHaveBeenCalledWith("second");
+	});
 });
 
 describe("wait", () => {
@@ -234,5 +248,18 @@ describe("getInitials", () => {
 	it("should use first name when last name is null or undefined", () => {
 		expect(getInitials("John", null)).toBe("Jo");
 		expect(getInitials("John", undefined)).toBe("Jo");
+	});
+
+	it("should use default none fallback when options object provides only separator", () => {
+		expect(getInitials("", "", { separator: "-" })).toBeUndefined();
+	});
+
+	it("should apply both separator and none options together", () => {
+		expect(getInitials("", "", { none: "??", separator: "_" })).toBe("??");
+		expect(getInitials("John", "Doe", { none: "??", separator: "." })).toBe("J.D");
+	});
+
+	it("should uppercase initials even when separator is provided", () => {
+		expect(getInitials("alice", "bob", { separator: "-" })).toBe("A-B");
 	});
 });
