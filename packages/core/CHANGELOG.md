@@ -1,5 +1,11 @@
 # @jabascript/core
 
+## 0.6.0
+
+### Minor Changes
+
+- b075652: - Added `Result` utility type.
+
 ## 0.5.0
 
 ### Minor Changes

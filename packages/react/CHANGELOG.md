@@ -1,5 +1,11 @@
 # @jabascript/react
 
+## 0.3.1
+
+### Patch Changes
+
+- b075652: - Fix race condition bug in useDelayedToggleState hook by tracking and clearing pending timeouts.
+
 ## 0.3.0
 
 ### Minor Changes
