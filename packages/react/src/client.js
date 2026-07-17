@@ -1,5 +1,5 @@
 /** @import {Dispatch, SetStateAction} from "react"; */
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 /**
  * Creates a boolean where one gets delayed than the other whenever the setter is called.
@@ -19,21 +19,35 @@ export function useDelayedToggleState(defaultValue, delay = 300, escapeDelay = 1
 	const [toggled, setToggle] = useState(defaultValue);
 	const [delayed, setDelayed] = useState(defaultValue);
 
+	const toggleTimeoutRef = useRef(null);
+	const delayTimeoutRef = useRef(null);
+
+	useEffect(() => {
+		return () => {
+			clearTimeout(toggleTimeoutRef.current);
+			clearTimeout(delayTimeoutRef.current);
+		};
+	}, []);
+
 	/** @type {Dispatch<SetStateAction<boolean>>} */
 	const setState = useCallback(
-		(value) =>
+		(value) => {
+			clearTimeout(toggleTimeoutRef.current);
+			clearTimeout(delayTimeoutRef.current);
+
 			setToggle((ctv) => {
 				const x = typeof value === "function" ? value(ctv) : value;
 
 				if (ctv) {
-					setTimeout(() => setDelayed(x), delay);
+					delayTimeoutRef.current = setTimeout(() => setDelayed(x), delay);
 					return x;
 				}
 
 				setDelayed(x);
-				setTimeout(() => setToggle(x), escapeDelay);
+				toggleTimeoutRef.current = setTimeout(() => setToggle(x), escapeDelay);
 				return ctv;
-			}),
+			});
+		},
 		[delay, escapeDelay],
 	);
 

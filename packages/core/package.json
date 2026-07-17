@@ -23,6 +23,10 @@
 		"./enum": {
 			"types": "./typings/enum.d.ts",
 			"import": "./src/enum.js"
+		},
+		"./result": {
+			"types": "./typings/result.d.ts",
+			"import": "./src/result.js"
 		}
 	},
 	"scripts": {

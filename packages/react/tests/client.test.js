@@ -120,6 +120,27 @@ describe("useDelayedToggleState", () => {
 		expect(result.current[1]).toBe(false);
 	});
 
+	it("should handle actual rapid toggling without race conditions", async () => {
+		const { result, act } = await renderHook(() => useDelayedToggleState(true, 100));
+
+		// Start closing (toggled becomes false immediately)
+		await act(() => result.current[2](false));
+		expect(result.current[0]).toBe(false);
+		expect(result.current[1]).toBe(true);
+
+		// Reopen immediately (after 10ms, before 100ms delay finishes)
+		await new Promise((resolve) => setTimeout(resolve, 10));
+		await act(() => result.current[2](true));
+		expect(result.current[1]).toBe(true);
+
+		// Wait for states to settle (past the 100ms delay)
+		await new Promise((resolve) => setTimeout(resolve, 150));
+
+		// Since we reopened, both should remain true
+		expect(result.current[0]).toBe(true);
+		expect(result.current[1]).toBe(true);
+	});
+
 	it("should work for dialog/popup use case - opening animation", async () => {
 		const { result, act } = await renderHook(() => useDelayedToggleState(false, 300));
 
