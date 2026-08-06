@@ -129,7 +129,7 @@ export function parseSearchParams(searchParams, allowFalsy = false) {
 	const result = {};
 
 	for (const [x, y] of searchParams.entries()) {
-		const val = getLiteralValue(y);
+		const val = getValueLiteral(y);
 		const isArray = x.endsWith("[]") || x in result;
 
 		if (!isArray && !allowFalsy && (val === undefined || val === null)) continue;
@@ -154,7 +154,7 @@ export function parseSearchParams(searchParams, allowFalsy = false) {
  * @param {string} value
  * @returns {string | null | undefined}
  */
-export function getLiteralValue(value) {
+export function getValueLiteral(value) {
 	if (value === "null") return null;
 	if (value === "undefined") return undefined;
 	return value;

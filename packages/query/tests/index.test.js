@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createSearchParams, createURL, getLiteralValue, parseSearchParams } from "../src/index.js";
+import { createSearchParams, createURL, getValueLiteral, parseSearchParams } from "../src/index.js";
 
 describe("createSearchParams", () => {
 	it("should create basic search params", () => {
@@ -276,19 +276,19 @@ describe("parseSearchParams", () => {
 	});
 });
 
-describe("getLiteralValue", () => {
+describe("getValueLiteral", () => {
 	it("should convert the string 'null' to null", () => {
-		expect(getLiteralValue("null")).toBeNull();
+		expect(getValueLiteral("null")).toBeNull();
 	});
 
 	it("should convert the string 'undefined' to undefined", () => {
-		expect(getLiteralValue("undefined")).toBeUndefined();
+		expect(getValueLiteral("undefined")).toBeUndefined();
 	});
 
 	it("should return any other string unchanged", () => {
-		expect(getLiteralValue("hello")).toBe("hello");
-		expect(getLiteralValue("")).toBe("");
-		expect(getLiteralValue("0")).toBe("0");
-		expect(getLiteralValue("false")).toBe("false");
+		expect(getValueLiteral("hello")).toBe("hello");
+		expect(getValueLiteral("")).toBe("");
+		expect(getValueLiteral("0")).toBe("0");
+		expect(getValueLiteral("false")).toBe("false");
 	});
 });
